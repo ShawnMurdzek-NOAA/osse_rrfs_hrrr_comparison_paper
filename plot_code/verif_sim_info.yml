@@ -5,21 +5,25 @@ sim_verif:
     osse_pt_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/rrfs-workflow_orion/sims_syn_data/winter/{subtyp}/2022020109/output/point_stat'
     osse_grid_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_grid_NR/rrfs-workflow_orion/winter/{subtyp}/output/GridStat'
     color: '#004D40'
+    ls: '-.'
   RRFS_spring:
     real_pt_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/rrfs-workflow_orion/sims_real_red_data/spring/{subtyp}/2022042921/output/point_stat'
     osse_pt_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/rrfs-workflow_orion/sims_syn_data/spring/{subtyp}/2022042921/output/point_stat'
     osse_grid_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_grid_NR/rrfs-workflow_orion/spring/{subtyp}/output/GridStat'
     color: '#FFC107'
+    ls: '-.'
   HRRR_winter:
     real_pt_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_pt_obs/hercules_hrrr/sims_real_red_data/winter/{subtyp}/2022020109/output/point_stat'
     osse_pt_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_pt_obs/hercules_hrrr/sims_syn_data/winter/{subtyp}/2022020109/output/point_stat'
     osse_grid_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_grid_NR/hercules_hrrr/winter/{subtyp}/output/GridStat'
     color: '#1E88E5'
+    ls: '-'
   HRRR_spring:
     real_pt_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_pt_obs/hercules_hrrr/sims_real_red_data/spring/{subtyp}/2022042921/output/point_stat'
     osse_pt_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_pt_obs/hercules_hrrr/sims_syn_data/spring/{subtyp}/2022042921/output/point_stat'
     osse_grid_dir: '/work2/noaa/wrfruc/murdzek/HRRR_OSSE/metplus_verif_grid_NR/hercules_hrrr/spring/{subtyp}/output/GridStat'
     color: '#D81B60'
+    ls: '-'
 
 sfc_pt:
   TMP:
@@ -68,4 +72,99 @@ sfc_pt:
       plot_param:
         OBTYPE: 'ADPSFC'
         FCST_LEV: 'Z10'
+        FCST_VAR: 'UGRD_VGRD'
+
+ua_pt:
+  TMP:
+    plot_stat: 'RMSE'
+    kwargs: &tmp_ua_kwargs
+      file_prefix: 'point_stat'
+      line_type: 'sl1l2'
+      ci: True
+      ci_lvl: 0.95
+      ci_opt: 't_dist'
+      ci_kw:
+        acct_lag_corr: False
+      diff_kw: &tmp_ua_diff
+        var: ['RMSE']
+        pct: True
+        match: 
+          - 'FCST_LEAD'
+          - 'FCST_VAR'
+          - 'FCST_VALID_BEG'
+          - 'FCST_LEV'
+          - 'FCST_UNITS'
+          - 'VX_MASK'
+          - 'OBTYPE'
+      mean_legend: False
+      toggle_pts: False
+      plot_param:
+        OBTYPE: 'ADPUPA'
+        FCST_VAR: 'TMP'
+  SPFH:
+    plot_stat: 'RMSE'
+    kwargs:
+      <<: *tmp_ua_kwargs
+      plot_param:
+        OBTYPE: 'ADPUPA'
+        FCST_VAR: 'SPFH'
+  UGRD_VGRD:
+    plot_stat: 'VECT_RMSE'
+    kwargs:
+      <<: *tmp_ua_kwargs
+      line_type: 'vl1l2'
+      diff_kw:
+        <<: *tmp_ua_diff
+        var: ['VECT_RMSE']
+      plot_param:
+        OBTYPE: 'ADPUPA'
+        FCST_VAR: 'UGRD_VGRD'
+
+ua_grid_osse:
+  TMP:
+    plot_stat: 'RMSE'
+    kwargs: &tmp_ua_osse_kwargs
+      file_prefix: 'grid_stat_FV3_TMP_vs_NR_TMP'
+      line_type: 'sl1l2'
+      ci: True
+      ci_lvl: 0.95
+      ci_opt: 't_dist'
+      ci_kw:
+        acct_lag_corr: True
+      diff_kw: &tmp_ua_osse_diff
+        var: ['RMSE']
+        pct: True
+        match: 
+          - 'FCST_LEAD'
+          - 'FCST_VAR'
+          - 'FCST_VALID_BEG'
+          - 'FCST_LEV'
+          - 'FCST_UNITS'
+          - 'VX_MASK'
+          - 'OBTYPE'
+      mean_legend: False
+      toggle_pts: False
+      plot_param:
+        not_VX_MASK: 'FULL'
+        OBTYPE: 'NR'
+        FCST_VAR: 'TMP'
+  SPFH:
+    plot_stat: 'RMSE'
+    kwargs:
+      <<: *tmp_ua_osse_kwargs
+      plot_param:
+        not_VX_MASK: 'FULL'
+        OBTYPE: 'NR'
+        FCST_VAR: 'SPFH'
+  UGRD_VGRD:
+    plot_stat: 'VECT_RMSE'
+    kwargs:
+      <<: *tmp_ua_osse_kwargs
+      line_type: 'vl1l2'
+      diff_kw:
+        <<: *tmp_ua_osse_diff
+        var: ['VECT_RMSE']
+      plot_param:
+        not_VX_MASK: 'FULL'
+        OBTYPE: 'NR'
         FCST_VAR: 'UGRD_VGRD'
