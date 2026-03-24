@@ -70,7 +70,7 @@ start = dt.datetime.now()
 with open(yml_fname, 'r') as fptr:
     param = yaml.safe_load(fptr)
 
-# Specify verification type (sfc)
+# Specify verification type
 for key in param['sim_verif'].keys():
     param['sim_verif'][key]['osse_grid_dir'] = param['sim_verif'][key]['osse_grid_dir'].format(subtyp='upper_air_below_sfc_mask')
 

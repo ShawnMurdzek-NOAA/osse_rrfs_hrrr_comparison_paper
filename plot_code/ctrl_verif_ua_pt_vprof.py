@@ -81,7 +81,7 @@ for fcst in fcst_lead:
 
     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(6.5, 4.5), sharey=True)
     plt.subplots_adjust(left=0.13, bottom=0.22, right=0.99, top=0.93, hspace=0.37, wspace=0.1)
-    for i, model in enumerate(['RRFS', 'HRRR']):
+    for i, model in enumerate(['HRRR', 'RRFS']):
         for j, (season, valid_times) in enumerate(zip(['winter', 'spring'], 
                                                       [valid_times_winter, valid_times_spring])):
             sim_family = param['sim_verif'][f"{model}_{season}"]
