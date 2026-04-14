@@ -46,7 +46,7 @@ ylabel_diff = {'TMP': 'T % diff',
 ylim_real = {'TMP': [1.3, 2.7],
              'SPFH': [0.2e-3, 1.35e-3],
              'UGRD_VGRD': [1.95, 3.2]}
-ylim_pct = [-50, 15]
+ylim_pct = [-40, 10]
 
 # Output file
 out_fname = '../figs/CtrlSfcPtVerif.pdf'
