@@ -1,5 +1,5 @@
 """
-Plot time series of RMSEs for various simulations using raobs for truth
+Plot time series of RMSEs for various simulations using the NR for truth
 
 shawn.s.murdzek@noaa.gov
 """
@@ -30,13 +30,16 @@ yml_fname = 'verif_sim_info.yml'
 fcst_lead = 1
 
 # Valid times
-valid_times = {'spring': [dt.datetime(2022, 4, 30, 0) + dt.timedelta(hours=i) for i in range(0, 145, 12)],
-               'winter': [dt.datetime(2022, 2, 1, 12) + dt.timedelta(hours=i) for i in range(0, 145, 12)]}
+valid_times = {'spring': [dt.datetime(2022, 4, 29, 21) + dt.timedelta(hours=i) for i in range(0, 159)][fcst_lead:],
+               'winter': [dt.datetime(2022, 2, 1, 9) + dt.timedelta(hours=i) for i in range(0, 159)][fcst_lead:]}
 
 # Valid times to exclude owing to missing data
+valid_times['winter'].remove(dt.datetime(2022, 2, 4, 19))
+valid_times['winter'].remove(dt.datetime(2022, 2, 4, 20))
+valid_times['winter'].remove(dt.datetime(2022, 2, 4, 21))
 
 # Output file (include {season} placeholder for season and {fl} placeholder for forecast lead)
-out_fname = '../figs/RMSEtimeseriesRAOB{season}{fl:02d}.pdf'
+out_fname = '../figs/RMSEtimeseriesNR{season}{fl:02d}.pdf'
 
 
 #---------------------------------------------------------------------------------------------------
@@ -54,13 +57,12 @@ ylabel = {'TMP': 'T (K)',
 with open(yml_fname, 'r') as fptr:
     param = yaml.safe_load(fptr)
 
-# Specify observation type (upper_air)
-all_sims = param['RRFS_app_orion']
-for s in all_sims.keys():
-    for season in ['spring', 'winter']:
-        all_sims[s][f"{season}_dir"] = all_sims[s][f"{season}_dir"].format(subtyp='upper_air')
-
 plot_vars = ['TMP', 'SPFH', 'UGRD_VGRD']
+
+all_colors = {'RRFS': {150: '#004D40', 35: '#FFC107'},
+              'HRRR': {150: '#1E88E5', 35: '#D81B60'}}
+all_ls = {'RRFS': {150: '-.', 35: '-.'},
+          'HRRR': {150: '-', 35: '-'}}
 
 # Create plots
 for season in valid_times.keys():
@@ -77,29 +79,36 @@ for season in valid_times.keys():
             line_type = 'vl1l2'
             stat = 'VECT_RMSE'
 
-        for sim in all_sims.keys():
+        for model in ['RRFS', 'HRRR']:
+            for uas in [35, 150]:
+                label = f"{model} {uas}-km UAS"
+ 
+                print(f"Plotting {season} {model} {uas}-km UAS {v}")
 
-            print(f"Plotting {season} {sim} {v}")
+                # Loop over each valid time
+                all_df = []
+                for t in valid_times[season]:
 
-            # Loop over each valid time
-            all_df = []
-            for t in valid_times[season]:
+                    # Read in MET output file
+                    df_ls = []
+                    for name in [f"osse_grid_uas{uas}_dir", "osse_grid_dir"]:
+                        path = param['sim_verif'][f"{model}_{season}"][name].format(subtyp='lower_atm_below_sfc_mask')
+                        t_str = t.strftime('%Y%m%d_%H%M%S')
+                        fname = f"{path}/grid_stat_FV3_TMP_vs_NR_TMP_{fcst_lead:02d}0000L_{t_str}V_{line_type}.txt"
+                        df = mt.read_ascii([fname])
+                        df = mt.subset_verif_df(df, {'FCST_VAR': v, 'not_VX_MASK': 'FULL'})
+                        df_ls.append(df)
 
-                # Read in MET output file
-                path = all_sims[sim][f"{season}_dir"]
-                t_str = t.strftime('%Y%m%d_%H%M%S')
-                fname = f"{path}/point_stat_{fcst_lead:02d}0000L_{t_str}V_{line_type}.txt"
-                df = mt.read_ascii([fname])
-                df = mt.subset_verif_df(df, {'FCST_VAR': v})
+                    # Compute vertical average
+                    all_df.append(mt.compute_stats_vert_avg(df_ls[0], verif_df2=df_ls[1], 
+                                                            diff_kw={'var': [stat]}, line_type=line_type, stats_kw={'agg': True}))
 
-                # Compute vertical average
-                all_df.append(mt.compute_stats_vert_avg(df, line_type=line_type, stats_kw={'agg': True}))
+                all_df = pd.concat(all_df)
 
-            all_df = pd.concat(all_df)
-
-            # Make plot
-            plot_vtimes = [dt.datetime.strptime(s, '%Y%m%d_%H%M%S') for s in all_df['FCST_VALID_BEG'].values]
-            ax.plot(plot_vtimes, all_df[stat].values, ls=all_sims[sim]['ls'], c=all_sims[sim]['color'], label=sim)
+                # Make plot
+                plot_vtimes = [dt.datetime.strptime(s, '%Y%m%d_%H%M%S') for s in all_df['FCST_VALID_BEG'].values]
+                ax.plot(plot_vtimes, all_df[stat].values, 
+                        ls=all_ls[model][uas], c=all_colors[model][uas], label=label)
 
         # Plot formatting
         ax.grid()
@@ -118,7 +127,7 @@ for season in valid_times.keys():
         if j == 0:
             ax.legend(fontsize=fontsize, ncols=2, loc=(0.75, -0.41))
 
-    plt.suptitle(f"{season} {fcst_lead}-hr RMSEs", size=(fontsize+4)) 
+    plt.suptitle(f"{season} {fcst_lead}-hr RMSE diffs", size=(fontsize+4)) 
     plt.savefig(out_fname.format(season=season, fl=fcst_lead))
     plt.close()
 
@@ -126,5 +135,5 @@ print(f"Done! Elapsed time = {(dt.datetime.now() - start).total_seconds()} s")
 
 
 """
-End timeseries_rmse_raob.py
+End timeseries_rmse_NR.py
 """

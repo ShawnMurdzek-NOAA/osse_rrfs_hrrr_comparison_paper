@@ -34,22 +34,22 @@ sim_verif:
     ls: '-'
 
 RRFS_app_orion:
-  RRFS_osse_ctrl:
+  RRFS OSSE ctrl:
     spring_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_syn_data/spring_2iter/{subtyp}/2022042921/output/point_stat'
     winter_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_syn_data/winter_2iter/{subtyp}/2022020109/output/point_stat'
     color: '#004D40'
     ls: '-'
-  RRFS_real_ctrl:
+  RRFS real ctrl:
     spring_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_real_red_data/spring/{subtyp}/2022042921/output/point_stat'
     winter_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_real_red_data/winter/{subtyp}/2022020109/output/point_stat'
     color: '#FFC107'
     ls: '-'
-  RRFS_osse_no_aircft:
+  RRFS OSSE no_aircft:
     spring_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_syn_data/spring_2iter_no_aircft/{subtyp}/2022042921/output/point_stat'
     winter_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_syn_data/winter_2iter_no_aircft/{subtyp}/2022020109/output/point_stat'
     color: '#1E88E5'
     ls: '-'
-  RRFS_real_no_aircft:
+  RRFS real no_aircft:
     spring_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_real_red_data/spring_no_aircft/{subtyp}/2022042921/output/point_stat'
     winter_dir: '/work2/noaa/wrfruc/murdzek/RRFS_OSSE/metplus_verif_pt_obs/app_orion/sims_real_red_data/winter_no_aircft/{subtyp}/2022020109/output/point_stat'
     color: '#D81B60'
