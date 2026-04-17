@@ -49,9 +49,9 @@ out_fname = '../figs/RMSEtimeseriesNR{season}{fl:02d}.pdf'
 start = dt.datetime.now()
 
 # Y axis labels
-ylabel = {'TMP': 'T (K)',
-          'SPFH': 'Q (g kg$^{-1}$)',
-          'UGRD_VGRD': 'winds (m s$^{-1}$)'}
+ylabel = {'TMP': 'T % diff',
+          'SPFH': 'Q % diff',
+          'UGRD_VGRD': 'winds % diff'}
 
 # Read in simulation and plotting information
 with open(yml_fname, 'r') as fptr:
@@ -67,7 +67,7 @@ all_ls = {'RRFS': {150: '-.', 35: '-.'},
 # Create plots
 for season in valid_times.keys():
     fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(6.5, 3.5))
-    plt.subplots_adjust(left=0.08, bottom=0.27, right=0.98, top=0.9, wspace=0.45)
+    plt.subplots_adjust(left=0.1, bottom=0.27, right=0.98, top=0.9, wspace=0.45)
     fontsize = 10
     for j, (v, letter) in enumerate(zip(plot_vars, ['a', 'b', 'c'])):
 
@@ -101,7 +101,7 @@ for season in valid_times.keys():
 
                     # Compute vertical average
                     all_df.append(mt.compute_stats_vert_avg(df_ls[0], verif_df2=df_ls[1], 
-                                                            diff_kw={'var': [stat]}, line_type=line_type, stats_kw={'agg': True}))
+                                                            diff_kw={'var': [stat], 'pct':True}, line_type=line_type, stats_kw={'agg': True}))
 
                 all_df = pd.concat(all_df)
 
@@ -112,6 +112,7 @@ for season in valid_times.keys():
 
         # Plot formatting
         ax.grid()
+        ax.set_ylim(top=5)
         ax.set_ylabel(ylabel[v], size=fontsize)
         date_format = mdates.DateFormatter('%d\n%b')
         ax.xaxis.set_major_formatter(date_format)
@@ -120,14 +121,14 @@ for season in valid_times.keys():
         ax.text(0.05, 0.92, f"{letter})", size=fontsize, weight='bold', transform=ax.transAxes,
                 backgroundcolor='white')
 
-        if v == 'SPFH':
-            formatter = mticker.FuncFormatter(lambda x, pos: f"{x*1e3:.2f}")
-            ax.yaxis.set_major_formatter(formatter)
+        #if v == 'SPFH':
+        #    formatter = mticker.FuncFormatter(lambda x, pos: f"{x*1e3:.2f}")
+        #    ax.yaxis.set_major_formatter(formatter)
 
         if j == 0:
             ax.legend(fontsize=fontsize, ncols=2, loc=(0.75, -0.41))
 
-    plt.suptitle(f"{season} {fcst_lead}-hr RMSE diffs", size=(fontsize+4)) 
+    plt.suptitle(f"{season} {fcst_lead}-hr RMSE % diffs", size=(fontsize+4)) 
     plt.savefig(out_fname.format(season=season, fl=fcst_lead))
     plt.close()
 
