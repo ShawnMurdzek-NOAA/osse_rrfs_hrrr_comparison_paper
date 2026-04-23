@@ -68,9 +68,9 @@ def read_pickle(file_path):
 
 
 for cyc in ['Production', 'Spinup']:
-    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(6.5, 3.5), sharex=True, sharey=True)
-    plt.subplots_adjust(left=0.08, bottom=0.22, right=0.98, top=0.88, wspace=0.05)
-    fontsize = 10
+    fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(6.5, 3), sharex=True, sharey=True)
+    plt.subplots_adjust(left=0.07, bottom=0.24, right=0.99, top=0.88, wspace=0.05)
+    fontsize = 9
     for i, (season, letter) in enumerate(zip(['spring', 'winter'], ['a', 'b'])):
         ax = axes[i]
         for j, (sim, c) in enumerate(zip(in_pickles[season].keys(), ['#004D40', '#FFC107', '#1E88E5', '#D81B60'])): 
@@ -110,16 +110,17 @@ for cyc in ['Production', 'Spinup']:
             # Make plot
             width = 0.225
             offset = width * j
-            ax.barh(np.arange(len(ob_subsets)) + offset, sum_jo_diffs, width, color=c, label=sim)
+            ax.barh(np.arange(len(ob_subsets)) + offset, sum_jo_diffs / 1e6, width, color=c, label=sim)
 
         # Plot formatting
         ax.set_title(season, size=fontsize)
         ax.grid(axis='x')
-        ax.set_xlabel('total impact (unitless)', size=fontsize)
-        ax.text(0.03, 0.92, f'{letter})', size=(fontsize-1), weight='bold', transform=ax.transAxes,
+        ax.set_xlabel(r'total impact ($\times$10$^{6}$, unitless)', size=fontsize)
+        ax.text(0.03, 0.91, f'{letter})', size=fontsize, weight='bold', transform=ax.transAxes,
                 backgroundcolor='white')
+        ax.tick_params(which='both', labelsize=fontsize)
         if i == 0:
-            ax.legend(fontsize=fontsize, ncols=4, loc=(0.07, -0.3))
+            ax.legend(fontsize=fontsize, ncols=4, loc=(0.16, -0.34))
             ax.set_yticks(np.arange(len(ob_subsets)) + (1.5*width), list(ob_subsets.keys()), size=fontsize)
 
     plt.suptitle(f"{cyc} Cycles", size=(fontsize+2))

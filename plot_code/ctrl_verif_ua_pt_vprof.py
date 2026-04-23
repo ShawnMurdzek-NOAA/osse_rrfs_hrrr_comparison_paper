@@ -80,8 +80,8 @@ for fcst in fcst_lead:
     print(f"Fcst lead = {fcst}")
 
     fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(6.5, 4.5), sharey=True)
-    plt.subplots_adjust(left=0.13, bottom=0.22, right=0.99, top=0.93, hspace=0.37, wspace=0.1)
-    for i, model in enumerate(['HRRR', 'RRFS']):
+    plt.subplots_adjust(left=0.12, bottom=0.2, right=0.99, top=0.94, hspace=0.37, wspace=0.1)
+    for i, model in enumerate(['RRFS', 'HRRR']):
         for j, (season, valid_times) in enumerate(zip(['winter', 'spring'], 
                                                       [valid_times_winter, valid_times_spring])):
             sim_family = param['sim_verif'][f"{model}_{season}"]
@@ -122,7 +122,7 @@ for fcst in fcst_lead:
 
     # Formatting
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-    fontsize = 11
+    fontsize = 9
     for i, desc in enumerate(['real', 'OSSE $-$ real']):
         for j, v in enumerate(plot_dict.keys()):
             ax = axes[i, j]
@@ -130,12 +130,12 @@ for fcst in fcst_lead:
             ax.grid()
 
             # Subplot labels
-            ax.text(0.05, 0.85, f'{letters[3*i+j]})', size=fontsize, weight='bold', transform=ax.transAxes,
+            ax.text(0.05, 0.87, f'{letters[3*i+j]})', size=fontsize, weight='bold', transform=ax.transAxes,
                     backgroundcolor='white')
 
             # Legend
             if (i == 1) and (j == 1):
-                ax.legend(ncols=2, fontsize=fontsize, loc=(-0.4, -0.71))
+                ax.legend(ncols=2, fontsize=fontsize, loc=(-0.25, -0.59))
             else:
                 ax.get_legend().remove()
 
@@ -156,14 +156,14 @@ for fcst in fcst_lead:
             ax.set_yticks(ticks=[1000, 700, 500, 300, 200, 100],
                           labels=['1000', '700', '500', '300', '200', '100'],
                           minor=False)
-            ax.tick_params(which='both', labelsize=9)
+            ax.tick_params(which='both', labelsize=fontsize)
 
             # Specific humidity ticks
             if (i == 0) and (j == 1):
                 formatter = mticker.FuncFormatter(lambda x, pos: f"{x*1e3:.2f}")
                 ax.xaxis.set_major_formatter(formatter)
 
-    plt.suptitle(f"{fcst}-hr RMSEs", size=14)
+    plt.suptitle(f"{fcst}-hr RMSEs", size=(fontsize+2))
     plt.savefig(out_fname.format(fcst=fcst))
     plt.close()
 

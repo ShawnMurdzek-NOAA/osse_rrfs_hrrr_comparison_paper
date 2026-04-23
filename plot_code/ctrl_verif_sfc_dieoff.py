@@ -71,9 +71,9 @@ for key in param['sim_verif'].keys():
 plot_dict = param['sfc_pt']
 
 # Create plots
-fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(6.5, 4.5), sharex=True)
-plt.subplots_adjust(left=0.12, bottom=0.24, right=0.99, top=0.99, hspace=0.1, wspace=0.42)
-for i, model in enumerate(['HRRR', 'RRFS']):
+fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(6.5, 4), sharex=True)
+plt.subplots_adjust(left=0.11, bottom=0.23, right=0.99, top=0.99, hspace=0.12, wspace=0.42)
+for i, model in enumerate(['RRFS', 'HRRR']):
     for j, (season, valid_times) in enumerate(zip(['winter', 'spring'], 
                                                   [valid_times_winter, valid_times_spring])):
         sim_family = param['sim_verif'][f"{model}_{season}"]
@@ -114,7 +114,7 @@ for i, model in enumerate(['HRRR', 'RRFS']):
 
 # Formatting
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-fontsize = 11
+fontsize = 9
 for i, desc in enumerate(['real', 'OSSE $-$ real']):
     for j, v in enumerate(plot_dict.keys()):
         ax = axes[i, j]
@@ -122,12 +122,12 @@ for i, desc in enumerate(['real', 'OSSE $-$ real']):
         ax.grid()
 
         # Subplot labels
-        ax.text(0.83, 0.07, f'{letters[3*i+j]})', size=fontsize, weight='bold', transform=ax.transAxes,
+        ax.text(0.85, 0.07, f'{letters[3*i+j]})', size=fontsize, weight='bold', transform=ax.transAxes,
                 backgroundcolor='white')
 
         # Legend
         if (i == 1) and (j == 1):
-            ax.legend(ncols=2, fontsize=fontsize, loc=(-0.5, -0.6))
+            ax.legend(ncols=2, fontsize=fontsize, loc=(-0.38, -0.58))
         else:
             ax.get_legend().remove()
 
@@ -148,7 +148,7 @@ for i, desc in enumerate(['real', 'OSSE $-$ real']):
             ax.set_ylim(ylim_pct)
 
         # Ticks
-        ax.tick_params(which='both', labelsize=9)
+        ax.tick_params(which='both', labelsize=fontsize)
 
         # Specific humidity ticks
         if (i == 0) and (j == 1):

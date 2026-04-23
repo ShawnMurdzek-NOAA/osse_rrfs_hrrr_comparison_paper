@@ -58,8 +58,8 @@ plot_vars = ['TMP', 'RH', 'UGRD_VGRD']
 # Create plots
 for season in valid_times.keys():
     fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(6.5, 2.5))
-    plt.subplots_adjust(left=0.08, bottom=0.17, right=0.98, top=0.9, wspace=0.35)
-    fontsize = 10
+    plt.subplots_adjust(left=0.08, bottom=0.17, right=0.99, top=0.9, wspace=0.32)
+    fontsize = 9
     for j, (v, letter) in enumerate(zip(plot_vars, ['a', 'b', 'c'])):
 
         ax = axes[j]

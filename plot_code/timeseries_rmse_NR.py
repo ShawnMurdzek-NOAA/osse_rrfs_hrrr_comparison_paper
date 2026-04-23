@@ -80,7 +80,7 @@ for season in valid_times.keys():
             stat = 'VECT_RMSE'
 
         for model in ['RRFS', 'HRRR']:
-            for uas in [35, 150]:
+            for uas in [150, 35]:
                 label = f"{model} {uas}-km UAS"
  
                 print(f"Plotting {season} {model} {uas}-km UAS {v}")
