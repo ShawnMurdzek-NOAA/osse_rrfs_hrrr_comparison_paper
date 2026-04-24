@@ -36,8 +36,8 @@ if 6 in fcst_lead:
     valid_times['winter'].remove(dt.datetime(2022, 2, 4, 14))
 
 # Seasons
-all_seasons = ['winter', 'spring'] 
-#all_seasons = ['winter'] 
+#all_seasons = ['winter', 'spring'] 
+all_seasons = ['spring'] 
 
 # UAS grid spacings
 uas_spacing = [150, 35]
@@ -56,7 +56,7 @@ xlabel_diff = {'TMP': 'T % diff',
 #        'UGRD_VGRD': [1.6, 6.3]}
 
 # Output file (include {fcst} placeholder)
-out_fname = '../figs/UASosseLowerAtmVerifPct{fcst:02d}.pdf'
+out_fname = '../figs/UASosseLowerAtmVerifPct{fcst:02d}Spring.pdf'
 
 
 #---------------------------------------------------------------------------------------------------
@@ -80,12 +80,12 @@ plot_dict = param['lower_atm_grid_uas_osse']
 # Create plots
 for fcst in fcst_lead:
     print(f"\nForecast Lead = {fcst}")
-    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(6.5, 7), sharey=True)
+    fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(6.5, 6), sharey=True)
     if len(all_seasons) == 2:
         bottom = 0.15
     else:
-        bottom = 0.11
-    plt.subplots_adjust(left=0.13, bottom=bottom, right=0.99, top=0.98, hspace=0.35, wspace=0.1)
+        bottom = 0.12
+    plt.subplots_adjust(left=0.12, bottom=bottom, right=0.99, top=0.98, hspace=0.32, wspace=0.08)
     for i, model in enumerate(['RRFS', 'HRRR']):
         for j, season in enumerate(all_seasons):
             sim_family = param['sim_verif'][f"{model}_{season}"]
@@ -131,7 +131,7 @@ for fcst in fcst_lead:
 
     # Formatting
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-    fontsize = 11
+    fontsize = 9
     for i in range(3):
         for j, v in enumerate(plot_dict.keys()):
             ax = axes[i, j]
@@ -147,7 +147,7 @@ for fcst in fcst_lead:
                 if len(all_seasons) == 2:
                     ax.legend(ncols=2, fontsize=fontsize, loc=(-0.3, -0.6))
                 else:
-                    ax.legend(ncols=2, fontsize=fontsize, loc=(-0.4, -0.45))
+                    ax.legend(ncols=2, fontsize=fontsize, loc=(-0.25, -0.45))
             else:
                 ax.get_legend().remove()
 
@@ -173,7 +173,7 @@ for fcst in fcst_lead:
             ax.set_yticks(ticks=[1000, 900, 800, 700, 600],
                           labels=['1000', '900', '800', '700', '600'],
                           minor=False)
-            ax.tick_params(which='both', labelsize=9)
+            ax.tick_params(which='both', labelsize=fontsize)
 
             # Specific humidity ticks
             if (i == 0) and (j == 1):

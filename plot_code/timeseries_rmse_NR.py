@@ -66,9 +66,9 @@ all_ls = {'RRFS': {150: '-.', 35: '-.'},
 
 # Create plots
 for season in valid_times.keys():
-    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(6.5, 3.5))
-    plt.subplots_adjust(left=0.1, bottom=0.27, right=0.98, top=0.9, wspace=0.45)
-    fontsize = 10
+    fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(6.5, 3))
+    plt.subplots_adjust(left=0.09, bottom=0.28, right=0.99, top=0.92, wspace=0.42)
+    fontsize = 9
     for j, (v, letter) in enumerate(zip(plot_vars, ['a', 'b', 'c'])):
 
         ax = axes[j]
@@ -118,7 +118,7 @@ for season in valid_times.keys():
         ax.xaxis.set_major_formatter(date_format)
         ax.xaxis.set_major_locator(mdates.DayLocator(interval=2))
         ax.tick_params(axis='both', which='major', labelsize=fontsize)
-        ax.text(0.05, 0.92, f"{letter})", size=fontsize, weight='bold', transform=ax.transAxes,
+        ax.text(0.05, 0.91, f"{letter})", size=fontsize, weight='bold', transform=ax.transAxes,
                 backgroundcolor='white')
 
         #if v == 'SPFH':
@@ -126,9 +126,9 @@ for season in valid_times.keys():
         #    ax.yaxis.set_major_formatter(formatter)
 
         if j == 0:
-            ax.legend(fontsize=fontsize, ncols=2, loc=(0.75, -0.41))
+            ax.legend(fontsize=fontsize, ncols=2, loc=(0.82, -0.42))
 
-    plt.suptitle(f"{season} {fcst_lead}-hr RMSE % diffs", size=(fontsize+4)) 
+    plt.suptitle(f"{season} {fcst_lead}-hr RMSE % diffs", size=(fontsize+2)) 
     plt.savefig(out_fname.format(season=season, fl=fcst_lead))
     plt.close()
 
