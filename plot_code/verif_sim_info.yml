@@ -114,7 +114,7 @@ ua_pt:
       ci_lvl: 0.95
       ci_opt: 't_dist'
       ci_kw:
-        acct_lag_corr: False
+        acct_lag_corr: True
       diff_kw: &tmp_ua_diff
         var: ['RMSE']
         pct: True

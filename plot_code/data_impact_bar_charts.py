@@ -38,6 +38,10 @@ in_pickles = {'spring': {'RRFS real': f"{rrfs_dir}/real_red_data_rrfs-workflow_o
 dt_list = {'spring': [dt.datetime(2022, 4, 29, 12) + dt.timedelta(hours=i) for i in range(169)],
            'winter': [dt.datetime(2022, 2, 1, 0) + dt.timedelta(hours=i) for i in range(169)]}
 
+# GPS PW and raob multipliers
+gps_mult = 10
+raob_mult = 10
+
 # Observation subsets
 ob_subsets = {'raob':[120, 122, 132, 220, 221, 222],
               'aircft':[130, 131, 133, 134, 135, 230, 231, 232, 233, 234, 235],
@@ -66,11 +70,15 @@ def read_pickle(file_path):
     with open(file_path, "rb") as f:
         return pickle.load(f)
 
+# Extract indices for GPS and RAOB. Needed for scaling later
+gps_idx = np.where(np.array(list(ob_subsets.keys())) == 'gps')[0][0]
+raob_idx = np.where(np.array(list(ob_subsets.keys())) == 'raob')[0][0]
 
 for cyc in ['Production', 'Spinup']:
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(6.5, 3), sharex=True, sharey=True)
-    plt.subplots_adjust(left=0.07, bottom=0.24, right=0.99, top=0.88, wspace=0.05)
+    plt.subplots_adjust(left=0.08, bottom=0.24, right=0.99, top=0.88, wspace=0.05)
     fontsize = 9
+
     for i, (season, letter) in enumerate(zip(['spring', 'winter'], ['a', 'b'])):
         ax = axes[i]
         for j, (sim, c) in enumerate(zip(in_pickles[season].keys(), ['#004D40', '#FFC107', '#1E88E5', '#D81B60'])): 
@@ -107,10 +115,22 @@ for cyc in ['Production', 'Spinup']:
                             idx = np.where(pkl_out['observation_type'] == typ)[0]
                             sum_jo_diffs[l] = sum_jo_diffs[l] + np.sum(pkl_out['jo_diff'][idx])
 
+            # Scale Jo diffs appropriately
+            sum_jo_diffs = sum_jo_diffs / 1e6
+            sum_jo_diffs[gps_idx] = sum_jo_diffs[gps_idx] * gps_mult
+            if cyc == 'Spinup':
+                sum_jo_diffs[raob_idx] = sum_jo_diffs[raob_idx] * raob_mult
+
             # Make plot
             width = 0.225
             offset = width * j
-            ax.barh(np.arange(len(ob_subsets)) + offset, sum_jo_diffs / 1e6, width, color=c, label=sim)
+            ax.barh(np.arange(len(ob_subsets)) + offset, sum_jo_diffs, width, color=c, label=sim)
+
+        # Bar names
+        ytick_labels = list(ob_subsets.keys())
+        ytick_labels[gps_idx] = "gps  \n("+r'$\times$'+f"{gps_mult})"
+        if cyc == 'Spinup':
+            ytick_labels[raob_idx] = "raob \n("+r'$\times$'+f"{raob_mult})"
 
         # Plot formatting
         ax.set_title(season, size=fontsize)
@@ -121,7 +141,7 @@ for cyc in ['Production', 'Spinup']:
         ax.tick_params(which='both', labelsize=fontsize)
         if i == 0:
             ax.legend(fontsize=fontsize, ncols=4, loc=(0.16, -0.34))
-            ax.set_yticks(np.arange(len(ob_subsets)) + (1.5*width), list(ob_subsets.keys()), size=fontsize)
+            ax.set_yticks(np.arange(len(ob_subsets)) + (1.5*width), ytick_labels, size=fontsize)
 
     plt.suptitle(f"{cyc} Cycles", size=(fontsize+2))
 

@@ -56,6 +56,7 @@ xlabel_diff = {'TMP': 'T % diff',
 #        'UGRD_VGRD': [1.6, 6.3]}
 
 # Output file (include {fcst} placeholder)
+#out_fname = '../figs/UASosseLowerAtmVerifPct{fcst:02d}SpringZOOM.pdf'
 out_fname = '../figs/UASosseLowerAtmVerifPct{fcst:02d}Spring.pdf'
 
 
@@ -170,6 +171,8 @@ for fcst in fcst_lead:
 
             # Ticks
             ax.set_ylim([1000, 530])
+            #if i == 2:
+            #    ax.set_xlim([-58, -45])
             ax.set_yticks(ticks=[1000, 900, 800, 700, 600],
                           labels=['1000', '900', '800', '700', '600'],
                           minor=False)
