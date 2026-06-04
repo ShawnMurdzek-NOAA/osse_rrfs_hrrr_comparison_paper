@@ -1,0 +1,3 @@
+[submodule "metplus_OSSE_scripts"]
+	path = metplus_OSSE_scripts
+	url = https://github.com/ShawnMurdzek-NOAA/metplus_OSSE_scripts.git
