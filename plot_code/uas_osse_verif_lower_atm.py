@@ -163,9 +163,9 @@ for fcst in fcst_lead:
             if (i == 0) and (j == 0):
                 ax.set_ylabel(f"Ctrl\npressure (hPa)", size=fontsize)
             elif (i == 1) and (j == 0):
-                ax.set_ylabel(f"{uas_spacing[0]}-km UAS\npressure (hPa)", size=fontsize)
+                ax.set_ylabel(f"{uas_spacing[0]}-km spacing UAS\npressure (hPa)", size=fontsize)
             elif (i == 2) and (j == 0):
-                ax.set_ylabel(f"{uas_spacing[1]}-km UAS\npressure (hPa)", size=fontsize)
+                ax.set_ylabel(f"{uas_spacing[1]}-km spacing UAS\npressure (hPa)", size=fontsize)
             else:
                 ax.set_ylabel('')
 

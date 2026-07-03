@@ -81,7 +81,7 @@ for cyc in ['Production', 'Spinup']:
 
     for i, (season, letter) in enumerate(zip(['spring', 'winter'], ['a', 'b'])):
         ax = axes[i]
-        for j, (sim, c) in enumerate(zip(in_pickles[season].keys(), ['#004D40', '#FFC107', '#1E88E5', '#D81B60'])): 
+        for j, (sim, c) in enumerate(zip(in_pickles[season].keys(), ['#FFC107', '#D81B60', '#004D40', '#1E88E5'])): 
         
             print(f"Plotting {cyc} {season} {sim}")
 

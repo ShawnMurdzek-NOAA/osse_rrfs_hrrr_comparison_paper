@@ -59,10 +59,10 @@ with open(yml_fname, 'r') as fptr:
 
 plot_vars = ['TMP', 'SPFH', 'UGRD_VGRD']
 
-all_colors = {'RRFS': {150: '#004D40', 35: '#FFC107'},
-              'HRRR': {150: '#1E88E5', 35: '#D81B60'}}
-all_ls = {'RRFS': {150: '-.', 35: '-.'},
-          'HRRR': {150: '-', 35: '-'}}
+all_colors = {'RRFS': {150: '#FFC107', 35: '#D81B60'},
+              'HRRR': {150: '#004D40', 35: '#1E88E5'}}
+all_ls = {'RRFS': {150: '-', 35: '-'},
+          'HRRR': {150: '-.', 35: '-.'}}
 
 # Create plots
 for season in valid_times.keys():
@@ -81,7 +81,7 @@ for season in valid_times.keys():
 
         for model in ['RRFS', 'HRRR']:
             for uas in [150, 35]:
-                label = f"{model} {uas}-km UAS"
+                label = f"{model} {uas}-km spacing UAS"
  
                 print(f"Plotting {season} {model} {uas}-km UAS {v}")
 
@@ -126,7 +126,7 @@ for season in valid_times.keys():
         #    ax.yaxis.set_major_formatter(formatter)
 
         if j == 0:
-            ax.legend(fontsize=fontsize, ncols=2, loc=(0.82, -0.42))
+            ax.legend(fontsize=fontsize, ncols=2, loc=(0.5, -0.42))
 
     plt.suptitle(f"{season} {fcst_lead}-hr RMSE % diffs", size=(fontsize+2)) 
     plt.savefig(out_fname.format(season=season, fl=fcst_lead))
